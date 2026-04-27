@@ -1,18 +1,19 @@
-FROM nginx:alpine AS production
-
-RUN rm -rf /usr/share/nginx/html/*
-
-COPY index.html /usr/share/nginx/html/index.html
-COPY README.md /usr/share/nginx/html/README.md
-COPY read.md /usr/share/nginx/html/read.md
-
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget -qO- http://localhost:80/ || exit 1
-
-EXPOSE 80
-
-USER 1001
+FROM node:20-alpine AS production
 
 WORKDIR /app
 
-CMD ["nginx", "-g", "daemon off;"]
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm install --production
+
+# Copy application files
+COPY server.js .
+COPY index.html .
+COPY README.md .
+COPY read.md .
+
+EXPOSE 3000
+
+USER 1001
+
+CMD ["npm", "start"]

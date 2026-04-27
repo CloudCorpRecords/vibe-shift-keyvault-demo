@@ -1,20 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>readyset-a56f</title>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #f5f5f5; }
-    .container { text-align: center; padding: 2rem; }
-    h1 { color: #333; }
-    p { color: #666; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise KeyVault</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --panel-bg: rgba(30, 41, 59, 0.7);
+            --accent: #3b82f6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 900px;
+            padding: 3rem 2rem;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .header .badge {
+            margin-left: 1rem;
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+        }
+
+        .search-container {
+            background: var(--panel-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+        }
+
+        input {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+        }
+
+        button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .results {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .secret-card {
+            background: var(--panel-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.2s;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .secret-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .secret-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .secret-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .secret-id {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-family: monospace;
+        }
+
+        .secret-key-container {
+            background: #000;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            color: #10b981;
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+            border: 1px solid #1f2937;
+        }
+
+        .secret-desc {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            background: var(--panel-bg);
+            border-radius: 12px;
+            border: 1px dashed rgba(255,255,255,0.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>readyset-a56f</h1>
-    <p>Deployed successfully with Opsera Vibe-Shift</p>
-  </div>
+    <div class="dashboard">
+        <div class="header">
+            <h1>KeyVault</h1>
+            <span class="badge">Enterprise Security</span>
+        </div>
+
+        <div class="search-container">
+            <p style="margin-top: 0; color: var(--text-muted); margin-bottom: 1rem;">Search for a specific system name to retrieve its keys (e.g., 'AWS Production')</p>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Enter system name exactly..." autocomplete="off">
+                <button onclick="searchSecrets()">Lookup Key</button>
+            </div>
+        </div>
+
+        <div id="results" class="results">
+            <div class="empty-state">
+                No system selected. Enter a system name above to retrieve secrets securely.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function searchSecrets() {
+            const query = document.getElementById('searchInput').value;
+            const resultsDiv = document.getElementById('results');
+            
+            if (!query) {
+                resultsDiv.innerHTML = '<div class="empty-state">Please enter a system name to search.</div>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data.length === 0) {
+                    resultsDiv.innerHTML = '<div class="empty-state">No secrets found for that system name. Access Denied.</div>';
+                    return;
+                }
+
+                resultsDiv.innerHTML = data.map(secret => `
+                    <div class="secret-card">
+                        <div class="secret-header">
+                            <div class="secret-title">${secret.system_name}</div>
+                            <div class="secret-id">ID: ${secret.id}</div>
+                        </div>
+                        <div class="secret-key-container">${secret.secret_key}</div>
+                        <p class="secret-desc">${secret.description}</p>
+                    </div>
+                `).join('');
+            } catch (err) {
+                resultsDiv.innerHTML = '<div class="empty-state" style="color: #ef4444;">Connection error or database failure.</div>';
+            }
+        }
+
+        // Enable enter key search
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                searchSecrets();
+            }
+        });
+    </script>
 </body>
 </html>
