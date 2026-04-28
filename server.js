@@ -1,6 +1,8 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const csrf = require('csurf');
+const cookieParser = require('cookie-parser');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -28,6 +30,15 @@ db.serialize(() => {
 
 // Serve static files from the current directory
 app.use(express.static(__dirname));
+
+// Use cookie parser and CSRF protection
+app.use(cookieParser());
+app.use(csrf({ cookie: true }));
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
 
 // Vulnerable Search API
 app.get('/api/search', (req, res) => {

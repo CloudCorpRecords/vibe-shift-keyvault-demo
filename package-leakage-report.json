@@ -1,0 +1,21 @@
+{
+  "tool": "package-leakage",
+  "findings": [
+    {
+      "severity": "medium",
+      "title": "npm: No publish file filter",
+      "description": "No files field or .npmignore — all tracked files will be published",
+      "file": "package.json",
+      "remediation": "Add a files array or .npmignore",
+      "ecosystem": "npm"
+    },
+    {
+      "severity": "high",
+      "title": "Docker: .dockerignore missing exclusions",
+      "description": "Missing: *.map",
+      "file": ".dockerignore",
+      "remediation": "Add *.map to .dockerignore",
+      "ecosystem": "docker"
+    }
+  ]
+}

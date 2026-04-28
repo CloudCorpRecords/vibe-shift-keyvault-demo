@@ -10,9 +10,10 @@ RUN npm install --production
 COPY server.js .
 COPY index.html .
 COPY README.md .
-COPY read.md .
 
 EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost:3000/health || exit 1
 
 USER 1001
 

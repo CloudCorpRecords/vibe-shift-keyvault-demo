@@ -1,0 +1,128 @@
+{
+    "check_type": "dockerfile",
+    "results": {
+        "failed_checks": [
+            {
+                "check_id": "CKV_DOCKER_2",
+                "bc_check_id": "BC_DKR_2",
+                "check_name": "Ensure that HEALTHCHECK instructions have been added to container images",
+                "check_result": {
+                    "result": "FAILED",
+                    "results_configuration": null
+                },
+                "code_block": [
+                    [
+                        1,
+                        "FROM node:20-alpine AS production\n"
+                    ],
+                    [
+                        2,
+                        "\n"
+                    ],
+                    [
+                        3,
+                        "WORKDIR /app\n"
+                    ],
+                    [
+                        4,
+                        "\n"
+                    ],
+                    [
+                        5,
+                        "# Copy package files and install dependencies\n"
+                    ],
+                    [
+                        6,
+                        "COPY package*.json ./\n"
+                    ],
+                    [
+                        7,
+                        "RUN npm install --production\n"
+                    ],
+                    [
+                        8,
+                        "\n"
+                    ],
+                    [
+                        9,
+                        "# Copy application files\n"
+                    ],
+                    [
+                        10,
+                        "COPY server.js .\n"
+                    ],
+                    [
+                        11,
+                        "COPY index.html .\n"
+                    ],
+                    [
+                        12,
+                        "COPY README.md .\n"
+                    ],
+                    [
+                        13,
+                        "COPY read.md .\n"
+                    ],
+                    [
+                        14,
+                        "\n"
+                    ],
+                    [
+                        15,
+                        "EXPOSE 3000\n"
+                    ],
+                    [
+                        16,
+                        "\n"
+                    ],
+                    [
+                        17,
+                        "USER 1001\n"
+                    ],
+                    [
+                        18,
+                        "\n"
+                    ],
+                    [
+                        19,
+                        "CMD [\"npm\", \"start\"]"
+                    ]
+                ],
+                "file_path": "/Dockerfile",
+                "file_abs_path": "/Users/reneturcios/Documents/helper/Dockerfile",
+                "repo_file_path": "/Dockerfile",
+                "file_line_range": [
+                    1,
+                    19
+                ],
+                "resource": "/Dockerfile.",
+                "evaluations": null,
+                "check_class": "checkov.dockerfile.checks.HealthcheckExists",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/docker-policies/docker-policy-index/ensure-that-healthcheck-instructions-have-been-added-to-container-images",
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null
+            }
+        ]
+    },
+    "summary": {
+        "passed": 25,
+        "failed": 1,
+        "skipped": 0,
+        "parsing_errors": 0,
+        "resource_count": 1,
+        "checkov_version": "3.2.517"
+    }
+}

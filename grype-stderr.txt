@@ -1,0 +1,2 @@
+[0000]  WARN no explicit name and version provided for directory source, deriving artifact ID from the given path (which is not ideal) from=syft
+[0000]  WARN current database is invalid error=the vulnerability database was built 2 weeks ago (max allowed age is 5 days)
